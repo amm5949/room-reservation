@@ -1,16 +1,19 @@
 package com.example.demo.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-public class Client extends Person{
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.List;
 
-    private int balance;
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+public class Client extends User
+{
+    private Integer balance;
 
-    public Client(String username, String password, int balance) {
-        super(username, password);
-        this.balance = balance;
-    }
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders;
 }

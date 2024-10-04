@@ -1,29 +1,26 @@
 package com.example.demo.models;
 
-import lombok.AccessLevel;
+import com.example.demo.models.enums.RoomStatus;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.EqualsAndHashCode;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 @Data
-public class Room
-{
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private static int idInc;
-    private int roomId;
-    private int roomNumber;
-    private int capacity;
-    private boolean isReserved;
+@EqualsAndHashCode(callSuper = false)
+public class Room extends BaseEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public Room(int roomNumber, int capacity, boolean isReserved) {
-        this.roomNumber = roomNumber;
-        this.capacity = capacity;
-        this.isReserved = isReserved;
-        setRoomId();
-    }
+    private String roomNumber;
+    private Integer price;
+    private Integer capacity;
+    @Enumerated(EnumType.STRING)
+    private RoomStatus status;
 
-    private void setRoomId(){
-        this.roomId = idInc++;
-    }
+    @OneToMany(mappedBy = "room")
+    private List<Order> orders;
 }

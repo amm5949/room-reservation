@@ -1,29 +1,28 @@
 package com.example.demo.models;
 
-import lombok.AccessLevel;
+import com.example.demo.models.enums.OrderStatus;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
+@Entity
 @Data
-public class Order
-{
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private static int idInc;
-    private int orderId;
-    private Client client;
+@Table(name = "_room") // room is reserved so it has to be changed
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class Order extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Room room;
-    private boolean isRegistered;
 
-    public Order(Client client, Room room, boolean isRegistered) {
-        this.client = client;
-        this.room = room;
-        this.isRegistered = isRegistered;
-        setOrderId();
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Client client;
 
-    private void setOrderId(){
-        this.orderId = idInc++;
-    }
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 }

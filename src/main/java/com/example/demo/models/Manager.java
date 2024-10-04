@@ -1,7 +1,10 @@
 package com.example.demo.models;
 
-public class Manager extends Person{
-    public Manager(String username, String password) {
-        super(username, password);
-    }
+import lombok.AllArgsConstructor;
+
+import javax.persistence.Entity;
+
+@Entity
+@AllArgsConstructor
+public class Manager extends User {
 }
