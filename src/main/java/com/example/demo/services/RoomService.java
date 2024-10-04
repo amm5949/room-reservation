@@ -6,6 +6,7 @@ import com.example.demo.models.Room;
 import com.example.demo.models.enums.RoomStatus;
 import com.example.demo.repositories.IRoomRepository;
 import com.example.demo.services.interfaces.IRoomService;
+import jdk.jfr.internal.tool.PrettyWriter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,22 +24,22 @@ public class RoomService implements IRoomService {
 
     @Override
     public List<RoomDto> getRooms() {
-        return roomRepository.findAll().stream().map(x-> toDto(x)).collect(Collectors.toList());
+        return roomRepository.findAll().stream().map(x -> toDto(x)).collect(Collectors.toList());
     }
 
     @Override
     public List<RoomDto> getAvailableRooms() {
-        return roomRepository.findAll().stream().filter(x-> x.getStatus()== RoomStatus.Available).map(x-> toDto(x)).collect(Collectors.toList());
+        return roomRepository.findAll().stream().filter(x -> x.getStatus() == RoomStatus.Available).map(x -> toDto(x)).collect(Collectors.toList());
     }
 
     @Override
     public List<RoomDto> getUnavailableRooms() {
-        return roomRepository.findAll().stream().filter(x-> x.getStatus()!= RoomStatus.Available).map(x-> toDto(x)).collect(Collectors.toList());
+        return roomRepository.findAll().stream().filter(x -> x.getStatus() != RoomStatus.Available).map(x -> toDto(x)).collect(Collectors.toList());
     }
 
     @Override
     public RoomDto getRoomById(long id) {
-        return toDto(roomRepository.findById(id).orElseThrow(()-> new NotFoundException("Room", id)));
+        return toDto(roomRepository.findById(id).orElseThrow(() -> new NotFoundException("Room", id)));
     }
 
     @Override
@@ -48,7 +49,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public RoomDto updateRoom(RoomDto room, long id) {
-        Room room1 = roomRepository.findById(id).orElseThrow(()-> new NotFoundException("Room", id));
+        Room room1 = roomRepository.findById(id).orElseThrow(() -> new NotFoundException("Room", id));
         room1.setRoomNumber(room.getRoomNumber());
         room1.setStatus(room.getStatus());
         room1.setCapacity(room.getCapacity());
@@ -58,8 +59,18 @@ public class RoomService implements IRoomService {
 
     @Override
     public void deleteRoomById(long id) {
-        Room room = roomRepository.findById(id).orElseThrow(()-> new NotFoundException("Room", id));
+        Room room = roomRepository.findById(id).orElseThrow(() -> new NotFoundException("Room", id));
         roomRepository.delete(room);
+    }
+
+    @Override
+    public Room acceptRoom(long roomId) {
+        return roomRepository.findById(roomId).map(
+                acceptedRoom -> {
+                    acceptedRoom.setStatus(RoomStatus.Reserved);
+                    return roomRepository.save(acceptedRoom);
+                }
+        ).orElseThrow(() -> new NotFoundException("Room not found with Id : "+ roomId));
     }
 
     private RoomDto toDto(Room room) {
