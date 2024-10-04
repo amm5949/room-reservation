@@ -1,13 +1,17 @@
 package com.example.demo.models;
 
 import com.example.demo.models.enums.RoomStatus;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Room extends BaseEntity{

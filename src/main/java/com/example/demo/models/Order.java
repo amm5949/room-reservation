@@ -1,12 +1,14 @@
 package com.example.demo.models;
 
 import com.example.demo.models.enums.OrderStatus;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
 @Entity
 @Data
 @Table(name = "_room") // room is reserved so it has to be changed

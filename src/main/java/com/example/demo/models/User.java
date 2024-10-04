@@ -1,11 +1,14 @@
 package com.example.demo.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
