@@ -5,6 +5,10 @@ public class NotFoundException extends RuntimeException{
         super(message);
     }
 
+    public NotFoundException(String getClass, long id) {
+        super(getClass+" with Id '"+id+"' not found");
+    }
+
     public NotFoundException(String message, Throwable cause) {
         super(message, cause);
     }

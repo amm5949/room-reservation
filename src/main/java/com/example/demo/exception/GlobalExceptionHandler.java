@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFoundException(NotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
         ErrorResponse err = new ErrorResponse();
 
         err.setStatus(HttpStatus.NOT_FOUND.value());
@@ -19,8 +19,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleUserGenericException(Exception ex) {
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponse> handleBadRequestException(Exception ex) {
         ErrorResponse err = new ErrorResponse();
 
         err.setStatus(HttpStatus.BAD_REQUEST.value());
