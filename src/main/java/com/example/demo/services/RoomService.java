@@ -64,26 +64,6 @@ public class RoomService implements IRoomService {
         roomRepository.delete(room);
     }
 
-    @Override
-    public Room acceptRoom(long roomId) {
-        return roomRepository.findById(roomId).map(
-                acceptedRoom -> {
-                    acceptedRoom.setRoomAcceptance(RoomAcceptance.Accept);
-                    return roomRepository.save(acceptedRoom);
-                }
-        ).orElseThrow(() -> new NotFoundException("Room not found with Id : " + roomId));
-    }
-
-    @Override
-    public Room declineRoom(long roomId) {
-        return roomRepository.findById(roomId).map(
-                acceptedRoom -> {
-                    acceptedRoom.setRoomAcceptance(RoomAcceptance.Decline);
-                    return roomRepository.save(acceptedRoom);
-                }
-        ).orElseThrow(() -> new NotFoundException("Room not found with Id : " + roomId));
-    }
-
     private RoomDto toDto(Room room) {
         RoomDto roomDto = new RoomDto();
         roomDto.setRoomNumber(room.getRoomNumber());

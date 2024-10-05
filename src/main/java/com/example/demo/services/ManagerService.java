@@ -12,33 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ManagerService implements IManagerService {
+public class ManagerService {
 
-    @Autowired
-    ManagerRepository managerRepository;
 
-    @Autowired
-    RoomService roomService;
-
-    @Override
-    public List<RoomDto> showAllRooms() {
-        List<RoomDto> roomDtoList = roomService.getRooms();
-
-        if (roomDtoList.isEmpty()) {
-            throw new NotFoundException("There is no Room to show!");
-        }
-        return roomDtoList;
-    }
-
-    @Override
-    public Room acceptRoomById(long roomId) {
-        // not found exception in room service
-        return roomService.acceptRoom(roomId);
-    }
-
-    @Override
-    public Room declineRoomById(long roomId) {
-        // not found exception in room service
-        return roomService.declineRoom(roomId);
-    }
 }

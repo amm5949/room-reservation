@@ -20,7 +20,4 @@ public interface IRoomService {
 
     void deleteRoomById(long id);
 
-    Room acceptRoom(long roomId);
-
-    Room declineRoom(long roomId);
 }

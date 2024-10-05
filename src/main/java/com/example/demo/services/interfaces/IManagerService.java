@@ -9,10 +9,4 @@ import java.util.List;
 @Service
 public interface IManagerService {
 
-    List<RoomDto> showAllRooms();
-
-    Room acceptRoomById(long roomId);
-
-    Room declineRoomById(long roomId);
-
 }
