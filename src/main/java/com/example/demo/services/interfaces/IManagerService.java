@@ -13,6 +13,6 @@ public interface IManagerService {
 
     Room acceptRoomById(long roomId);
 
-    RoomDto declineRoomById(long roomId);
+    Room declineRoomById(long roomId);
 
 }
