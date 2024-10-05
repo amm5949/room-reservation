@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.example.demo.models.enums.RoomAcceptance;
 import com.example.demo.models.enums.RoomStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,4 +28,6 @@ public class Room extends BaseEntity{
 
     @OneToMany(mappedBy = "room")
     private List<Order> orders;
+
+    private RoomAcceptance roomAcceptance;
 }

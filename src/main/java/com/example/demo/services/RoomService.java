@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.dtos.RoomDto;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.models.Room;
+import com.example.demo.models.enums.RoomAcceptance;
 import com.example.demo.models.enums.RoomStatus;
 import com.example.demo.repositories.IRoomRepository;
 import com.example.demo.services.interfaces.IRoomService;
@@ -67,10 +68,20 @@ public class RoomService implements IRoomService {
     public Room acceptRoom(long roomId) {
         return roomRepository.findById(roomId).map(
                 acceptedRoom -> {
-                    acceptedRoom.setStatus(RoomStatus.Reserved);
+                    acceptedRoom.setRoomAcceptance(RoomAcceptance.Accept);
                     return roomRepository.save(acceptedRoom);
                 }
-        ).orElseThrow(() -> new NotFoundException("Room not found with Id : "+ roomId));
+        ).orElseThrow(() -> new NotFoundException("Room not found with Id : " + roomId));
+    }
+
+    @Override
+    public Room declineRoom(long roomId) {
+        return roomRepository.findById(roomId).map(
+                acceptedRoom -> {
+                    acceptedRoom.setRoomAcceptance(RoomAcceptance.Decline);
+                    return roomRepository.save(acceptedRoom);
+                }
+        ).orElseThrow(() -> new NotFoundException("Room not found with Id : " + roomId));
     }
 
     private RoomDto toDto(Room room) {
