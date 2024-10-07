@@ -3,11 +3,9 @@ package com.example.demo.services;
 import com.example.demo.dtos.RoomDto;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.models.Room;
-import com.example.demo.models.enums.RoomAcceptance;
 import com.example.demo.models.enums.RoomStatus;
 import com.example.demo.repositories.IRoomRepository;
 import com.example.demo.services.interfaces.IRoomService;
-import jdk.jfr.internal.tool.PrettyWriter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
