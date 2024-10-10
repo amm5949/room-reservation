@@ -84,7 +84,7 @@ public class OrderService implements IOrderService {
 
     public Order toEntity(OrderDto orderDto) {
         Order order = new Order();
-        Client client = clientRepository.findByUsername(orderDto.getUsername()).orElseThrow(()-> new NotFoundException("Client Not Found"));
+        Client client = clientRepository.findByUserName(orderDto.getUsername()).orElseThrow(()-> new NotFoundException("Client Not Found"));
         Room room = roomRepository.findByRoomNumber(orderDto.getRoomNumber()).orElseThrow(()-> new NotFoundException("Room Not Found"));
         order.setClient(client);
         order.setRoom(room);
