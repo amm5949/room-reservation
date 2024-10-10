@@ -1,6 +1,7 @@
 package com.example.demo.services.interfaces;
 
 import com.example.demo.dtos.OrderDto;
+import com.example.demo.models.Manager;
 import com.example.demo.models.Order;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,11 @@ import java.util.List;
 @Service
 public interface IManagerService {
 
+    Manager registerManager(Manager manager);
 
-    List<OrderDto> getOrderLists();
+    List<Manager> getAllManagers();
 
-    OrderDto acceptOrder(long orderId);
+    void deleteManager(Long managerId);
 
-    OrderDto declienOrder(long orderId);
+    Manager updateManager(Manager manager,Long managerId);
 }

@@ -3,10 +3,12 @@ package com.example.demo.services;
 import com.example.demo.dtos.OrderDto;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.models.Client;
+import com.example.demo.models.Manager;
 import com.example.demo.models.Order;
 import com.example.demo.models.Room;
 import com.example.demo.models.enums.OrderStatus;
 import com.example.demo.repositories.IClientRepository;
+import com.example.demo.repositories.IManagerRepository;
 import com.example.demo.repositories.IOrderRepository;
 import com.example.demo.repositories.IRoomRepository;
 import com.example.demo.services.interfaces.IManagerService;
@@ -21,39 +23,30 @@ public class ManagerService implements IManagerService {
 
 
     @Autowired
-    IOrderRepository orderRepository;
-
-    @Autowired
-    IClientRepository clientRepository;
-    @Autowired
-    IRoomRepository roomRepository;
+    IManagerRepository managerRepository;
 
     @Override
-    public List<OrderDto> getOrderLists() {
-        return orderRepository.findAll().stream().map(x -> toDto(x)).collect(Collectors.toList());
+    public Manager registerManager(Manager manager) {
+        return managerRepository.save(manager);
     }
 
     @Override
-    public OrderDto acceptOrder(long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found"));
-        order.setStatus(OrderStatus.Accepted);
-        orderRepository.save(order);
-        return toDto(order);
+    public List<Manager> getAllManagers() {
+        return managerRepository.findAll();
     }
 
     @Override
-    public OrderDto declienOrder(long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found"));
-        order.setStatus(OrderStatus.Rejected);
-        orderRepository.save(order);
-        return toDto(order);
+    public void deleteManager(Long managerId) {
+        managerRepository.findById(managerId).orElseThrow(() -> new NotFoundException("Manager not found"));
+        managerRepository.deleteById(managerId);
     }
 
-    public OrderDto toDto(Order order) {
-        OrderDto orderDto = new OrderDto();
-        orderDto.setRoomNumber(order.getRoom().getRoomNumber());
-        orderDto.setUsername(order.getClient().getUserName());
-        orderDto.setCreatedAt(order.getCreatedAt());
-        return orderDto;
+    // TODO: change update method for Manager
+    @Override
+    public Manager updateManager(Manager newManager, Long managerId) {
+        Manager manager = managerRepository.findById(managerId).orElseThrow(() -> new NotFoundException("Manager not found"));
+        manager.setUserName(newManager.getUserName());
+        manager.setPassword(newManager.getPassword());
+        return managerRepository.save(manager);
     }
 }
