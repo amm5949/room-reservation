@@ -19,7 +19,7 @@ public class ManagerController {
 
 
     @GetMapping
-    public ResponseEntity<List<OrderDto>> getAllRooms() {
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
         return new ResponseEntity<>(managerService.getOrderLists(), HttpStatus.OK);
     }
 
