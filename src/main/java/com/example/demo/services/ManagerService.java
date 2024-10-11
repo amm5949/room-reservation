@@ -15,6 +15,7 @@ import com.example.demo.services.interfaces.IManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,21 +33,29 @@ public class ManagerService implements IManagerService {
 
     @Override
     public List<Manager> getAllManagers() {
-        return managerRepository.findAll();
+        List<Manager> managers = managerRepository.findAll();
+
+        if (managers.isEmpty()) {
+            throw new NotFoundException("Manager list is empty!");
+        }
+        return managers;
     }
 
     @Override
     public void deleteManager(Long managerId) {
-        managerRepository.findById(managerId).orElseThrow(() -> new NotFoundException("Manager not found"));
-        managerRepository.deleteById(managerId);
+        Manager manager = managerRepository.findById(managerId).
+                orElseThrow(() -> new NotFoundException("Manager not found with Id : " + managerId));
+        managerRepository.deleteById(manager.getId());
     }
 
     // TODO: change update method for Manager
     @Override
     public Manager updateManager(Manager newManager, Long managerId) {
-        Manager manager = managerRepository.findById(managerId).orElseThrow(() -> new NotFoundException("Manager not found"));
-        manager.setUserName(newManager.getUserName());
-        manager.setPassword(newManager.getPassword());
-        return managerRepository.save(manager);
+        return managerRepository.findById(managerId)
+                .map(manager -> {
+                    manager.setPassword(newManager.getPassword());
+                    manager.setUserName(newManager.getUserName());
+                    return managerRepository.save(manager);
+                }).orElseThrow(() -> new NotFoundException("Manager with Id " + managerId + " not found!"));
     }
 }
