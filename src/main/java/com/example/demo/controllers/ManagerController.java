@@ -53,7 +53,7 @@ public class ManagerController {
     @Operation(summary = "Delete manager by ID", description = "Delete a manager from the system by their ID")
     @ApiResponse(responseCode = "200", description = "Manager deleted successfully")
     @ApiResponse(responseCode = "404", description = "Manager not found")
-    public ResponseEntity<String> declineOrderRequest(@PathVariable long id) {
+    public ResponseEntity<String> deleteOrderById(@PathVariable long id) {
         managerService.deleteManager(id);
         return new ResponseEntity<>("Manager deleted successfully!", HttpStatus.OK);
     }
