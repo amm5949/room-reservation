@@ -1,9 +1,6 @@
 package com.example.demo.models;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;

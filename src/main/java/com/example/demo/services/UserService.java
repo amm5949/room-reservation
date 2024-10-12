@@ -2,7 +2,6 @@ package com.example.demo.services;
 
 import com.example.demo.dtos.AuthDto;
 import com.example.demo.exception.CustomBadRequestException;
-import com.example.demo.models.Manager;
 import com.example.demo.models.User;
 import com.example.demo.repositories.IUserRepository;
 import com.example.demo.services.interfaces.IUserService;

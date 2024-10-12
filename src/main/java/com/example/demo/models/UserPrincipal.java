@@ -9,8 +9,8 @@ import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
 
-    private User user;
-    private String role;
+    private final User user;
+    private final String role;
 
     public UserPrincipal(User user){
         this.user = user;

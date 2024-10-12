@@ -4,7 +4,6 @@ import com.example.demo.models.Admin;
 import com.example.demo.models.Client;
 import com.example.demo.models.Manager;
 import com.example.demo.repositories.IUserRepository;
-import com.example.demo.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

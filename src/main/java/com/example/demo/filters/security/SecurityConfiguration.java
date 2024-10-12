@@ -35,7 +35,7 @@ public class SecurityConfiguration
         http
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests((request) -> request
-                        .antMatchers("/users/**").permitAll()
+                        .antMatchers("/auth/**").permitAll()
                         .antMatchers("/rooms/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
