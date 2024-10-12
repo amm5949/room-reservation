@@ -36,6 +36,7 @@ public class SecurityConfiguration
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests((request) -> request
                         .antMatchers("/auth/**").permitAll()
+                        .antMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .antMatchers("/rooms/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
