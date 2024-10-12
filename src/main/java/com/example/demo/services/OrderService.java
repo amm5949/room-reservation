@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.dtos.OrderDto;
-import com.example.demo.exception.NotFoundException;
+import com.example.demo.exception.CustomNotFoundException;
 import com.example.demo.models.Client;
 import com.example.demo.models.Order;
 import com.example.demo.models.Room;
@@ -35,7 +35,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<OrderDto> getOrdersByClientName(String username) {
-        return orderRepository.findAll().stream().filter(x-> x.getClient().getUserName().equals(username)).map(x->toDto(x)).collect(Collectors.toList());
+        return orderRepository.findAll().stream().filter(x-> x.getClient().getUsername().equals(username)).map(x->toDto(x)).collect(Collectors.toList());
         //username ignoreCase or default
     }
 
@@ -61,7 +61,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderDto acceptOrder(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(()->new NotFoundException("Order not found"));
+        Order order = orderRepository.findById(id).orElseThrow(()->new CustomNotFoundException("Order not found"));
         order.setStatus(OrderStatus.Accepted);
         orderRepository.save(order);
         return toDto(order);
@@ -69,7 +69,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderDto rejectOrder(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(()->new NotFoundException("Order not found"));
+        Order order = orderRepository.findById(id).orElseThrow(()->new CustomNotFoundException("Order not found"));
         order.setStatus(OrderStatus.Rejected);
         orderRepository.save(order);
         return toDto(order);
@@ -77,15 +77,15 @@ public class OrderService implements IOrderService {
 
     @Override
     public void deleteOrder(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(()->new NotFoundException("Order not found"));
+        Order order = orderRepository.findById(id).orElseThrow(()->new CustomNotFoundException("Order not found"));
         order.setStatus(OrderStatus.Canceled);
         orderRepository.save(order);
     }
 
     public Order toEntity(OrderDto orderDto) {
         Order order = new Order();
-        Client client = clientRepository.findByUsername(orderDto.getUsername()).orElseThrow(()-> new NotFoundException("Client Not Found"));
-        Room room = roomRepository.findByRoomNumber(orderDto.getRoomNumber()).orElseThrow(()-> new NotFoundException("Room Not Found"));
+        Client client = clientRepository.findByUsername(orderDto.getUsername()).orElseThrow(()-> new CustomNotFoundException("Client Not Found"));
+        Room room = roomRepository.findByRoomNumber(orderDto.getRoomNumber()).orElseThrow(()-> new CustomNotFoundException("Room Not Found"));
         order.setClient(client);
         order.setRoom(room);
         order.setStatus(OrderStatus.Pending);
@@ -95,7 +95,7 @@ public class OrderService implements IOrderService {
     public OrderDto toDto(Order order){
         OrderDto orderDto = new OrderDto();
         orderDto.setRoomNumber(order.getRoom().getRoomNumber());
-        orderDto.setUsername(order.getClient().getUserName());
+        orderDto.setUsername(order.getClient().getUsername());
         orderDto.setCreatedAt(order.getCreatedAt());
         return orderDto;
     }

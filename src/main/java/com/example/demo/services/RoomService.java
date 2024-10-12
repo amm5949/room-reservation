@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.dtos.RoomDto;
-import com.example.demo.exception.NotFoundException;
+import com.example.demo.exception.CustomNotFoundException;
 import com.example.demo.models.Room;
 import com.example.demo.models.enums.RoomStatus;
 import com.example.demo.repositories.IRoomRepository;
@@ -38,7 +38,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public RoomDto getRoomById(long id) {
-        return toDto(roomRepository.findById(id).orElseThrow(() -> new NotFoundException("Room", id)));
+        return toDto(roomRepository.findById(id).orElseThrow(() -> new CustomNotFoundException("Room", id)));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public RoomDto updateRoom(RoomDto room, long id) {
-        Room room1 = roomRepository.findById(id).orElseThrow(() -> new NotFoundException("Room", id));
+        Room room1 = roomRepository.findById(id).orElseThrow(() -> new CustomNotFoundException("Room", id));
         room1.setRoomNumber(room.getRoomNumber());
         room1.setStatus(room.getStatus());
         room1.setCapacity(room.getCapacity());
@@ -58,7 +58,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public void deleteRoomById(long id) {
-        Room room = roomRepository.findById(id).orElseThrow(() -> new NotFoundException("Room", id));
+        Room room = roomRepository.findById(id).orElseThrow(() -> new CustomNotFoundException("Room", id));
         roomRepository.delete(room);
     }
 

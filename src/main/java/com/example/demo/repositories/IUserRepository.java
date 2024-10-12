@@ -1,6 +1,6 @@
 package com.example.demo.repositories;
 
-import com.example.demo.models.Client;
+import com.example.demo.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface IClientRepository extends JpaRepository<Client , Long> {
-    public Optional<Client> findByUsername(String username);
+public interface IUserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsername(String username);
 }
