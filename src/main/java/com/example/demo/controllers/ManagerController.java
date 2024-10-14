@@ -1,9 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.dtos.OrderDto;
-import com.example.demo.dtos.RoomDto;
 import com.example.demo.models.Manager;
-import com.example.demo.models.Room;
 import com.example.demo.services.ManagerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
