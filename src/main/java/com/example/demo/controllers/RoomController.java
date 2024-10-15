@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.dtos.RoomDto;
 import com.example.demo.services.RoomService;
+import com.example.demo.vms.RoomVM;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,7 +31,7 @@ public class RoomController {
                             schema = @Schema(implementation = RoomDto.class))),
             @ApiResponse(responseCode = "404", description = "No Room found")
     })
-    public ResponseEntity<List<RoomDto>> getAllRooms() {
+    public ResponseEntity<List<RoomVM>> getAllRooms() {
         return new ResponseEntity<>(roomService.getRooms(), HttpStatus.OK);
     }
 
@@ -42,7 +43,7 @@ public class RoomController {
                             schema = @Schema(implementation = RoomDto.class))),
             @ApiResponse(responseCode = "404", description = "No available room found")
     })
-    public ResponseEntity<List<RoomDto>> getAllAvailableRooms() {
+    public ResponseEntity<List<RoomVM>> getAllAvailableRooms() {
         return new ResponseEntity<>(roomService.getAvailableRooms(), HttpStatus.OK);
     }
 
@@ -54,7 +55,7 @@ public class RoomController {
                             schema = @Schema(implementation = RoomDto.class))),
             @ApiResponse(responseCode = "404", description = "No unavailable room found")
     })
-    public ResponseEntity<List<RoomDto>> getAllUnavailableRooms() {
+    public ResponseEntity<List<RoomVM>> getAllUnavailableRooms() {
         return new ResponseEntity<>(roomService.getUnavailableRooms(), HttpStatus.OK);
     }
 
@@ -66,7 +67,7 @@ public class RoomController {
                             schema = @Schema(implementation = RoomDto.class))),
             @ApiResponse(responseCode = "404", description = "No room found with this Id")
     })
-    public ResponseEntity<RoomDto> getRoomById(@PathVariable Long id) {
+    public ResponseEntity<RoomVM> getRoomById(@PathVariable Long id) {
         return new ResponseEntity<>(roomService.getRoomById(id), HttpStatus.OK);
     }
 
@@ -78,7 +79,7 @@ public class RoomController {
                             schema = @Schema(implementation = RoomDto.class))),
             @ApiResponse(responseCode = "404", description = "No room found with this Id")
     })
-    public ResponseEntity<RoomDto> createRoom(@RequestBody RoomDto roomDto) {
+    public ResponseEntity<RoomVM> createRoom(@RequestBody RoomDto roomDto) {
         return new ResponseEntity<>(roomService.createRoom(roomDto), HttpStatus.CREATED);
     }
 
@@ -90,7 +91,7 @@ public class RoomController {
                             schema = @Schema(implementation = RoomDto.class))),
             @ApiResponse(responseCode = "404", description = "No room found with this Id")
     })
-    public ResponseEntity<RoomDto> updateRoom(@RequestBody RoomDto roomDto, @PathVariable long id) {
+    public ResponseEntity<RoomVM> updateRoom(@RequestBody RoomDto roomDto, @PathVariable long id) {
         return new ResponseEntity<>(roomService.updateRoom(roomDto, id), HttpStatus.OK);
     }
 
@@ -102,7 +103,7 @@ public class RoomController {
                             schema = @Schema(implementation = RoomDto.class))),
             @ApiResponse(responseCode = "404", description = "No room found with this Id")
     })
-    public ResponseEntity<RoomDto> deleteRoom(@PathVariable long id) {
+    public ResponseEntity<?> deleteRoom(@PathVariable long id) {
         roomService.deleteRoomById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
