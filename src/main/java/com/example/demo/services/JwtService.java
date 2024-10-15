@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,15 @@ public class JwtService {
 
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
+    @Autowired
+    private MyUserDetailsService userDetailsService;
+
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-
+        UserDetails user = userDetailsService.loadUserByUsername(username);
+        claims.put("role", user.getAuthorities());
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + 1000 * 60 * 60))
@@ -44,7 +50,7 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key).build()
                 .parseClaimsJws(token).getBody();

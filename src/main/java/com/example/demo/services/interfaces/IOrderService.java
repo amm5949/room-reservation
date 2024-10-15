@@ -1,22 +1,23 @@
 package com.example.demo.services.interfaces;
 
 import com.example.demo.dtos.OrderDto;
+import com.example.demo.vms.OrderVM;
 
 import java.util.List;
 
 public interface IOrderService {
 
-    OrderDto makeOrder(OrderDto orderDto);
+    OrderVM makeOrder(OrderDto orderDto);
 
-    List<OrderDto> getOrdersByClientName(String username);
+    List<OrderVM> getOrdersByClientName(String username);
 
-    List<OrderDto> getAllOrders();
-    List<OrderDto> getPendingOrders();
-    List<OrderDto> getAcceptedOrders();
-    List<OrderDto> getRejectedOrders();
+    List<OrderVM> getAllOrders();
+    List<OrderVM> getPendingOrders();
+    List<OrderVM> getAcceptedOrders();
+    List<OrderVM> getRejectedOrders();
 
-    OrderDto acceptOrder(Long id);
-    OrderDto rejectOrder(Long id);
+    OrderVM acceptOrder(Long id);
+    OrderVM rejectOrder(Long id);
 
     void deleteOrder(Long id);
 }

@@ -2,21 +2,22 @@ package com.example.demo.services.interfaces;
 
 import com.example.demo.dtos.RoomDto;
 import com.example.demo.models.Room;
+import com.example.demo.vms.RoomVM;
 
 import java.util.List;
 
 public interface IRoomService {
-    List<RoomDto> getRooms();
+    List<RoomVM> getRooms();
 
-    List<RoomDto> getAvailableRooms();
+    List<RoomVM> getAvailableRooms();
 
-    List<RoomDto> getUnavailableRooms();
+    List<RoomVM> getUnavailableRooms();
 
-    RoomDto getRoomById(long id);
+    RoomVM getRoomById(long id);
 
-    RoomDto createRoom(RoomDto room);
+    RoomVM createRoom(RoomDto room);
 
-    RoomDto updateRoom(RoomDto room, long id);
+    RoomVM updateRoom(RoomDto room, long id);
 
     void deleteRoomById(long id);
 

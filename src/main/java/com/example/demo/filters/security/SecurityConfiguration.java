@@ -4,6 +4,8 @@ import com.example.demo.services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,6 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
 
 @Configuration
 @EnableWebSecurity
@@ -33,11 +39,17 @@ public class SecurityConfiguration
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors().and()
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests((request) -> request
                         .antMatchers("/auth/**").permitAll()
                         .antMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .antMatchers("/rooms/**").hasAuthority("ADMIN")
+                        .antMatchers(HttpMethod.GET,"/rooms/**").hasAnyAuthority("CLIENT", "ADMIN")
+                        .antMatchers(HttpMethod.POST,"/rooms/**").hasAuthority( "ADMIN")
+                        .antMatchers(HttpMethod.PUT,"/rooms/**").hasAuthority("ADMIN")
+                        .antMatchers(HttpMethod.DELETE,"/rooms/**").hasAuthority("ADMIN")
+                        .antMatchers(HttpMethod.GET,"/orders/**").hasAnyAuthority("ADMIN","MANAGER")
+                        .antMatchers(HttpMethod.POST,"/orders/createOrder").hasAuthority("Client")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter , UsernamePasswordAuthenticationFilter.class);
@@ -60,6 +72,18 @@ public class SecurityConfiguration
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(8);
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 
 }
