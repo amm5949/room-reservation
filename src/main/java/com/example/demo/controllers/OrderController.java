@@ -81,15 +81,15 @@ public class OrderController {
         return new ResponseEntity<>(orderService.getOrdersByClientName(username), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/{roomId}")
     @Operation(summary = "Create order", description = "Create an Order by using the Post method.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully created an Order",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = OrderDto.class))),
     })
-    public ResponseEntity<OrderVM> createOrder(@RequestBody OrderDto orderDto) {
-        return new ResponseEntity<>(orderService.makeOrder(orderDto), HttpStatus.CREATED);
+    public ResponseEntity<OrderVM> createOrder(@PathVariable Long roomId) {
+        return new ResponseEntity<>(orderService.makeOrder(roomId), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/accept")
@@ -104,7 +104,7 @@ public class OrderController {
         return new ResponseEntity<>(orderService.acceptOrder(id), HttpStatus.OK);
     }
 
-    @PutMapping("{id}/reject")
+    @PutMapping("{id}/decline")
     @Operation(summary = "Reject order by ID", description = "Update an Order status to Rejected by Order ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order updated successfully to Rejected status",

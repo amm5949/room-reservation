@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IOrderService {
 
-    OrderVM makeOrder(OrderDto orderDto);
+    OrderVM makeOrder(Long roomId);
 
     List<OrderVM> getOrdersByClientName(String username);
 

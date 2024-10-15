@@ -49,7 +49,7 @@ public class SecurityConfiguration
                         .antMatchers(HttpMethod.PUT,"/rooms/**").hasAuthority("ADMIN")
                         .antMatchers(HttpMethod.DELETE,"/rooms/**").hasAuthority("ADMIN")
                         .antMatchers(HttpMethod.GET,"/orders/**").hasAnyAuthority("ADMIN","MANAGER")
-                        .antMatchers(HttpMethod.POST,"/orders/createOrder").hasAuthority("Client")
+                        .antMatchers(HttpMethod.POST,"/orders/**").hasAuthority("CLIENT")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter , UsernamePasswordAuthenticationFilter.class);

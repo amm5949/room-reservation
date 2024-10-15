@@ -34,11 +34,11 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public OrderVM makeOrder(OrderDto orderDto) {
+    public OrderVM makeOrder(Long roomId) {
         Order order = new Order();
         UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Room room = roomRepository.findById(orderDto.getRoomId()).orElseThrow(()-> new CustomNotFoundException("Room Not Found"));
+        Room room = roomRepository.findById(roomId).orElseThrow(()-> new CustomNotFoundException("Room Not Found"));
         order.setClient(clientRepository.findByUsername(user.getUsername()).orElseThrow(()-> new CustomNotFoundException("Client Not Found")));
         order.setRoom(room);
         order.setStatus(OrderStatus.Pending);

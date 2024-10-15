@@ -6,6 +6,5 @@ import java.time.LocalDateTime;
 
 @Data
 public class OrderDto {
-    private String username;
     private Long roomId;
 }
