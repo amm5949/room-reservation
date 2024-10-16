@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.dtos.AuthDto;
 import com.example.demo.exception.CustomBadRequestException;
+import com.example.demo.exception.CustomNotFoundException;
 import com.example.demo.models.User;
 import com.example.demo.repositories.IUserRepository;
 import com.example.demo.services.interfaces.IUserService;
@@ -12,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
@@ -31,7 +34,7 @@ public class UserService implements IUserService {
         userRepository.save(toEntity(authDto));
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword()));
 
-        if(authentication.isAuthenticated()){
+        if (authentication.isAuthenticated()) {
             return jwtService.generateToken(authDto.getUsername());
         }
         throw new CustomBadRequestException("something went wrong");
@@ -40,10 +43,16 @@ public class UserService implements IUserService {
     public String login(AuthDto authDto) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword()));
 
-        if(authentication.isAuthenticated()){
+        if (authentication.isAuthenticated()) {
             return jwtService.generateToken(authDto.getUsername());
         }
         throw new UsernameNotFoundException(authDto.getUsername());
+    }
+
+    public String getUserEmailByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+
+        return user.map(User::getEmail).orElseThrow(() -> new CustomNotFoundException("User not found"));
     }
 
     User toEntity(AuthDto authDto) {
@@ -53,7 +62,7 @@ public class UserService implements IUserService {
         return user;
     }
 
-    AuthDto toDto(User user){
+    AuthDto toDto(User user) {
         AuthDto authDto = new AuthDto();
         authDto.setUsername(user.getUsername());
         authDto.setPassword(user.getPassword());

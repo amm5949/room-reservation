@@ -2,6 +2,7 @@ package com.example.demo.models;
 
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,9 +19,10 @@ public class User extends BaseEntity{
 
     private String username;
     private String password;
-
-    public User(String username, String password) {
+    private String email;
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 }

@@ -13,6 +13,7 @@ import com.example.demo.services.interfaces.IOrderService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,33 +36,33 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<OrderDto> getOrdersByClientName(String username) {
-        return orderRepository.findAll().stream().filter(x-> x.getClient().getUsername().equals(username)).map(x->toDto(x)).collect(Collectors.toList());
+        return orderRepository.findAll().stream().filter(x -> x.getClient().getUsername().equals(username)).map(x -> toDto(x)).collect(Collectors.toList());
         //username ignoreCase or default
     }
 
     @Override
     public List<OrderDto> getAllOrders() {
-        return orderRepository.findAll().stream().map(x->toDto(x)).collect(Collectors.toList());
+        return orderRepository.findAll().stream().map(x -> toDto(x)).collect(Collectors.toList());
     }
 
     @Override
     public List<OrderDto> getPendingOrders() {
-        return orderRepository.findAll().stream().filter(x-> x.getStatus() == OrderStatus.Pending).map(x->toDto(x)).collect(Collectors.toList());
+        return orderRepository.findAll().stream().filter(x -> x.getStatus() == OrderStatus.Pending).map(x -> toDto(x)).collect(Collectors.toList());
     }
 
     @Override
     public List<OrderDto> getAcceptedOrders() {
-        return orderRepository.findAll().stream().filter(x-> x.getStatus() == OrderStatus.Accepted).map(x->toDto(x)).collect(Collectors.toList());
+        return orderRepository.findAll().stream().filter(x -> x.getStatus() == OrderStatus.Accepted).map(x -> toDto(x)).collect(Collectors.toList());
     }
 
     @Override
     public List<OrderDto> getRejectedOrders() {
-        return orderRepository.findAll().stream().filter(x-> x.getStatus() == OrderStatus.Rejected).map(x->toDto(x)).collect(Collectors.toList());
+        return orderRepository.findAll().stream().filter(x -> x.getStatus() == OrderStatus.Rejected).map(x -> toDto(x)).collect(Collectors.toList());
     }
 
     @Override
     public OrderDto acceptOrder(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(()->new CustomNotFoundException("Order not found"));
+        Order order = orderRepository.findById(id).orElseThrow(() -> new CustomNotFoundException("Order not found"));
         order.setStatus(OrderStatus.Accepted);
         orderRepository.save(order);
         return toDto(order);
@@ -69,7 +70,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderDto rejectOrder(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(()->new CustomNotFoundException("Order not found"));
+        Order order = orderRepository.findById(id).orElseThrow(() -> new CustomNotFoundException("Order not found"));
         order.setStatus(OrderStatus.Rejected);
         orderRepository.save(order);
         return toDto(order);
@@ -77,22 +78,28 @@ public class OrderService implements IOrderService {
 
     @Override
     public void deleteOrder(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(()->new CustomNotFoundException("Order not found"));
+        Order order = orderRepository.findById(id).orElseThrow(() -> new CustomNotFoundException("Order not found"));
         order.setStatus(OrderStatus.Canceled);
         orderRepository.save(order);
     }
 
+    public boolean checkOrderStats(Long id) {
+        return orderRepository.findById(id)
+                .map(order -> order.getStatus() == OrderStatus.Accepted)
+                .orElse(false);
+    }
+
     public Order toEntity(OrderDto orderDto) {
         Order order = new Order();
-        Client client = clientRepository.findByUsername(orderDto.getUsername()).orElseThrow(()-> new CustomNotFoundException("Client Not Found"));
-        Room room = roomRepository.findByRoomNumber(orderDto.getRoomNumber()).orElseThrow(()-> new CustomNotFoundException("Room Not Found"));
+        Client client = clientRepository.findByUsername(orderDto.getUsername()).orElseThrow(() -> new CustomNotFoundException("Client Not Found"));
+        Room room = roomRepository.findByRoomNumber(orderDto.getRoomNumber()).orElseThrow(() -> new CustomNotFoundException("Room Not Found"));
         order.setClient(client);
         order.setRoom(room);
         order.setStatus(OrderStatus.Pending);
         return order;
     }
 
-    public OrderDto toDto(Order order){
+    public OrderDto toDto(Order order) {
         OrderDto orderDto = new OrderDto();
         orderDto.setRoomNumber(order.getRoom().getRoomNumber());
         orderDto.setUsername(order.getClient().getUsername());

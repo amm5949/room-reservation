@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.dtos.OrderDto;
 import com.example.demo.services.OrderService;
+import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,6 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +23,12 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     @Operation(summary = "Get all orders", description = "Retrieve a list of all Orders")
@@ -100,7 +110,15 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "order not found!")
     })
     public ResponseEntity<OrderDto> acceptOrder(@PathVariable Long id) {
-        return new ResponseEntity<>(orderService.acceptOrder(id), HttpStatus.OK);
+        ResponseEntity<OrderDto> response = new ResponseEntity<>(orderService.acceptOrder(id), HttpStatus.OK);
+
+        if (orderService.checkOrderStats(id)) {
+            getLoggedInUsername();
+            emailService.sendMail(userService.getUserEmailByUsername(getLoggedInUsername())
+                    , "Room request"
+                    , "Your reservation request successfully accepted!");
+        }
+        return response;
     }
 
     @PutMapping("{id}/reject")
@@ -112,7 +130,15 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "order not found!")
     })
     public ResponseEntity<OrderDto> rejectOrder(@PathVariable Long id) {
-        return new ResponseEntity<>(orderService.rejectOrder(id), HttpStatus.OK);
+        ResponseEntity<OrderDto> response = new ResponseEntity<>(orderService.rejectOrder(id), HttpStatus.OK);
+
+        if (orderService.checkOrderStats(id)) {
+            getLoggedInUsername();
+            emailService.sendMail(userService.getUserEmailByUsername(getLoggedInUsername())
+                    , "Room request"
+                    , "Your reservation request unfortunately rejected (:");
+        }
+        return response;
     }
 
     @DeleteMapping("{id}")
@@ -127,4 +153,14 @@ public class OrderController {
         orderService.deleteOrder(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    public String getLoggedInUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return userDetails.getUsername();
+        }
+        return null;
+    }
+
 }
