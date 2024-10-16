@@ -7,8 +7,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 public class Manager extends User{
 
-    public Manager(String username, String password) {
-        super(username, password);
+    public Manager(String username, String password, String email) {
+        super(username, password, email);
     }
-
 }

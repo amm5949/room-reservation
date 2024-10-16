@@ -35,3 +35,4 @@ build/
 
 ## app properties variables ##
 application-dev.properties
+application.properties

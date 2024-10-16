@@ -14,18 +14,19 @@ import javax.annotation.PostConstruct;
 @SpringBootApplication
 public class DemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
 
-	@Autowired
-	private IUserRepository userRepository;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	@PostConstruct
-	public void init() {
-		userRepository.save(new Admin("admin",passwordEncoder.encode("admin")));
-		userRepository.save(new Manager("manager",passwordEncoder.encode("manager")));
-		userRepository.save(new Client("client",passwordEncoder.encode("client")));
-	}
+    @Autowired
+    private IUserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @PostConstruct
+    public void init() {
+        userRepository.save(new Admin("admin", passwordEncoder.encode("admin"), "admin@email.com"));
+        userRepository.save(new Manager("manager", passwordEncoder.encode("manager"), "manager@email.com"));
+        userRepository.save(new Client("client", passwordEncoder.encode("client"), "client@email.com"));
+    }
 }

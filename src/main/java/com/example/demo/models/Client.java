@@ -13,8 +13,8 @@ import java.util.List;
 public class Client extends User
 {
 
-    public Client(String username, String password){
-        super(username, password);
+    public Client(String username, String password, String email){
+        super(username, password, email);
     }
 
     private Integer balance;
