@@ -77,7 +77,7 @@ public class OrderController {
         return new ResponseEntity<>(orderService.getPendingOrders(), HttpStatus.OK);
     }
 
-    @GetMapping("{username}")
+    @GetMapping("/my")
     @Operation(summary = "Get order by user-name", description = "Retrieve a list of all user orders by UserName.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved User orders list",
@@ -85,7 +85,7 @@ public class OrderController {
                             schema = @Schema(implementation = OrderDto.class))),
             @ApiResponse(responseCode = "404", description = "Accepted order list is empty!")
     })
-    public ResponseEntity<List<OrderVM>> getOrderById(@PathVariable String username) {
+    public ResponseEntity<List<OrderVM>> getOrderById() {
         return new ResponseEntity<>(orderService.getOrdersByContext(), HttpStatus.OK);
     }
 
