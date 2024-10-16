@@ -115,7 +115,7 @@ public class OrderController {
 
         if (orderService.checkOrderStats(id)) {
 
-            emailService.sendMail(userService.getUserEmailByUsername(getLoggedInUsername())
+            emailService.sendMail(userService.getLoggedInEmail()
                     , "Room request"
                     , "Your reservation request successfully accepted!");
         }
@@ -135,7 +135,7 @@ public class OrderController {
 
         if (orderService.checkOrderStats(id)) {
 
-            emailService.sendMail(userService.getUserEmailByUsername(getLoggedInUsername())
+            emailService.sendMail(userService.getLoggedInEmail()
                     , "Room request"
                     , "Your reservation request unfortunately rejected (:");
         }
@@ -153,16 +153,6 @@ public class OrderController {
     public ResponseEntity<OrderDto> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    public String getLoggedInUsername() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-            return userDetails.getUsername();
-        }
-        return null;
     }
 
 }

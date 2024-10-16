@@ -4,6 +4,7 @@ import com.example.demo.dtos.AuthDto;
 import com.example.demo.exception.CustomBadRequestException;
 import com.example.demo.exception.CustomNotFoundException;
 import com.example.demo.models.User;
+import com.example.demo.models.UserPrincipal;
 import com.example.demo.repositories.IUserRepository;
 import com.example.demo.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,21 +52,16 @@ public class UserService implements IUserService {
         throw new UsernameNotFoundException(authDto.getUsername());
     }
 
-    public String getUserEmailByUsername(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-
-        return user.map(User::getEmail).orElseThrow(() -> new CustomNotFoundException("User not found"));
-    }
-
-    public String getLoggedInUsername() {
+    public String getLoggedInEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            UserPrincipal userDetails = (UserPrincipal) authentication.getPrincipal();
 
-            return userDetails.getUsername();
+            return userDetails.getEmail();
         }
         return null;
     }
+
     User toEntity(AuthDto authDto) {
         User user = new User();
         user.setUsername(authDto.getUsername());
