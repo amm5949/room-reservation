@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,7 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>();
         UserDetails user = userDetailsService.loadUserByUsername(username);
         claims.put("role", user.getAuthorities());
+        System.out.println(Arrays.toString(key.getEncoded()));
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
