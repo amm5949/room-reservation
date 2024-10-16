@@ -9,7 +9,7 @@ public interface IOrderService {
 
     OrderVM makeOrder(Long roomId);
 
-    List<OrderVM> getOrdersByClientName(String username);
+    List<OrderVM> getOrdersByContext();
 
     List<OrderVM> getAllOrders();
     List<OrderVM> getPendingOrders();

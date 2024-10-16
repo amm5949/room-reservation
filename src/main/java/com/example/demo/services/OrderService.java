@@ -1,11 +1,13 @@
 package com.example.demo.services;
 
+import com.example.demo.exception.CustomBadRequestException;
 import com.example.demo.exception.CustomNotFoundException;
 import com.example.demo.models.Client;
 import com.example.demo.models.Order;
 import com.example.demo.models.Room;
 import com.example.demo.models.UserPrincipal;
 import com.example.demo.models.enums.OrderStatus;
+import com.example.demo.models.enums.RoomStatus;
 import com.example.demo.repositories.IClientRepository;
 import com.example.demo.repositories.IOrderRepository;
 import com.example.demo.repositories.IRoomRepository;
@@ -16,7 +18,9 @@ import com.example.demo.vms.RoomVM;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,21 +36,28 @@ public class OrderService implements IOrderService {
         this.roomRepository = roomRepository;
     }
 
+    @Transactional
     @Override
     public OrderVM makeOrder(Long roomId) {
         Order order = new Order();
         UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        Client client = clientRepository.findByUsername(user.getUsername()).orElseThrow(()-> new CustomNotFoundException("Client Not Found"));
         Room room = roomRepository.findById(roomId).orElseThrow(()-> new CustomNotFoundException("Room Not Found"));
-        order.setClient(clientRepository.findByUsername(user.getUsername()).orElseThrow(()-> new CustomNotFoundException("Client Not Found")));
+        if(room.getStatus() != RoomStatus.Available){
+            throw new CustomBadRequestException("The Room you are trying to order is not Available");
+        }
+        order.setClient(client);
         order.setRoom(room);
+        room.setStatus(RoomStatus.Reserved);
         order.setStatus(OrderStatus.Pending);
         return toVM(orderRepository.save(order));
     }
 
     @Override
-    public List<OrderVM> getOrdersByClientName(String username) {
-        return orderRepository.findAll().stream().filter(x-> x.getClient().getUsername().equals(username)).map(x->toVM(x)).collect(Collectors.toList());
+    public List<OrderVM> getOrdersByContext() {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return orderRepository.findAll().stream().filter(x-> x.getClient().getUsername().equals(userPrincipal.getUsername())).map(x->toVM(x)).collect(Collectors.toList());
         //username ignoreCase or default
     }
 
@@ -78,11 +89,14 @@ public class OrderService implements IOrderService {
         return toVM(order);
     }
 
+    @Transactional
     @Override
     public OrderVM rejectOrder(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(()->new CustomNotFoundException("Order not found"));
         order.setStatus(OrderStatus.Rejected);
         orderRepository.save(order);
+        Room room = roomRepository.findById(order.getRoom().getId()).orElseThrow(()->new CustomNotFoundException("Room not found"));
+        room.setStatus(RoomStatus.Available);
         return toVM(order);
     }
 

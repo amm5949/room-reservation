@@ -86,7 +86,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Accepted order list is empty!")
     })
     public ResponseEntity<List<OrderVM>> getOrderById(@PathVariable String username) {
-        return new ResponseEntity<>(orderService.getOrdersByClientName(username), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getOrdersByContext(), HttpStatus.OK);
     }
 
     @PostMapping("/{roomId}")
