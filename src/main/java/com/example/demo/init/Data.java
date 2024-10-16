@@ -31,7 +31,7 @@ public class Data {
 
         roomRepository.save(new Room(1L, "Luxury Suite", 1500, 15, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSp_ZzeqvKBrERhI0dO_t2shraAsWQHZPcUYg&s", RoomStatus.Available, null));
         roomRepository.save(new Room(2L, "Executive Room", 250, 2, "https://cdn.marriottnetwork.com/uploads/sites/23/2022/10/Executive-Suite-Living-and-Dining-Rooms-5091-788x650.jpg", RoomStatus.Available, null));
-        roomRepository.save(new Room(3L, "Deluxe Room", 200, 2, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdM9MlHn-sxYrdh9nHLQuWCceeKxFduM2tWA&s", RoomStatus.Reserved, null));
+        roomRepository.save(new Room(3L, "Deluxe Room", 200, 2, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfSBJutkDAwZMqXHdZMNi6hDOZCFIOYVccQQ&s", RoomStatus.Reserved, null));
         roomRepository.save(new Room(4L, "Family Room", 150, 4, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ3t8XLobtw46daUdj9YrRyL1ajfgSWWZ8uA&s", RoomStatus.Available, null));
         roomRepository.save(new Room(5L, "Single Room", 100, 1, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvyTxDZ71BEqtpmSsZpBiK_XsAWXaxX3FhFw&s",RoomStatus.Available, null));
         roomRepository.save(new Room(6L, "Studio Room", 180, 2, "https://design-tips.floorplanner.com/wp-content/uploads/2021/02/5692effb27a05d4fbb5609feb010764e6eb3f513.jpg", RoomStatus.Available, null));

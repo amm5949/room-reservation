@@ -44,7 +44,7 @@ public class SecurityConfiguration
                 .authorizeHttpRequests((request) -> request
                         .antMatchers("/auth/**").permitAll()
                         .antMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .antMatchers(HttpMethod.GET,"/rooms/**").hasAnyAuthority("CLIENT", "ADMIN")
+                        .antMatchers(HttpMethod.GET,"/rooms/**").hasAnyAuthority("CLIENT", "ADMIN", "MANAGER")
                         .antMatchers(HttpMethod.POST,"/rooms/**").hasAuthority( "ADMIN")
                         .antMatchers(HttpMethod.PUT,"/rooms/**").hasAuthority("ADMIN")
                         .antMatchers(HttpMethod.DELETE,"/rooms/**").hasAuthority("ADMIN")
