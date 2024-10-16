@@ -12,9 +12,16 @@ public class UserPrincipal implements UserDetails {
     private final User user;
     private final String role;
 
-    public UserPrincipal(User user){
+    private final String email;
+
+    public UserPrincipal(User user) {
         this.user = user;
         this.role = user.getClass().getSimpleName().toUpperCase();
+        this.email = user.getEmail();
+    }
+
+    public String getEmail() {
+        return user.getEmail();
     }
 
     @Override

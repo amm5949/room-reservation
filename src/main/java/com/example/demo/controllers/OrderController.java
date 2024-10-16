@@ -113,7 +113,7 @@ public class OrderController {
         ResponseEntity<OrderDto> response = new ResponseEntity<>(orderService.acceptOrder(id), HttpStatus.OK);
 
         if (orderService.checkOrderStats(id)) {
-            getLoggedInUsername();
+
             emailService.sendMail(userService.getUserEmailByUsername(getLoggedInUsername())
                     , "Room request"
                     , "Your reservation request successfully accepted!");
@@ -133,7 +133,7 @@ public class OrderController {
         ResponseEntity<OrderDto> response = new ResponseEntity<>(orderService.rejectOrder(id), HttpStatus.OK);
 
         if (orderService.checkOrderStats(id)) {
-            getLoggedInUsername();
+
             emailService.sendMail(userService.getUserEmailByUsername(getLoggedInUsername())
                     , "Room request"
                     , "Your reservation request unfortunately rejected (:");
@@ -158,6 +158,7 @@ public class OrderController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
             return userDetails.getUsername();
         }
         return null;
