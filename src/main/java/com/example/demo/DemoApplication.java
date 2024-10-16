@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.controllers.EmailService;
 import com.example.demo.models.Admin;
 import com.example.demo.models.Client;
 import com.example.demo.models.Manager;

@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.dtos.OrderDto;
+import com.example.demo.services.EmailService;
 import com.example.demo.services.OrderService;
 import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
