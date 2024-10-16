@@ -1,8 +1,10 @@
 package com.example.demo.controllers;
 
 import com.example.demo.dtos.OrderDto;
+import com.example.demo.services.EmailService;
 import com.example.demo.services.OrderService;
 import com.example.demo.vms.OrderVM;
+import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +22,12 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     @Operation(summary = "Get all orders", description = "Retrieve a list of all Orders")
@@ -101,7 +109,15 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "order not found!")
     })
     public ResponseEntity<OrderVM> acceptOrder(@PathVariable Long id) {
-        return new ResponseEntity<>(orderService.acceptOrder(id), HttpStatus.OK);
+        ResponseEntity<OrderVM> response = new ResponseEntity<>(orderService.acceptOrder(id), HttpStatus.OK);
+
+        if (orderService.checkOrderStats(id)) {
+
+            emailService.sendMail(userService.getLoggedInEmail()
+                    , "Room request"
+                    , "Your reservation request successfully accepted!");
+        }
+        return response;
     }
 
     @PutMapping("{id}/decline")
@@ -113,7 +129,16 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "order not found!")
     })
     public ResponseEntity<OrderVM> rejectOrder(@PathVariable Long id) {
-        return new ResponseEntity<>(orderService.rejectOrder(id), HttpStatus.OK);
+        ResponseEntity<OrderVM> response = new ResponseEntity<>(orderService.rejectOrder(id), HttpStatus.OK);
+
+        if (orderService.checkOrderStats(id)) {
+
+            emailService.sendMail(userService.getLoggedInEmail()
+                    , "Room request"
+                    , "Your reservation request unfortunately rejected (:");
+        }
+        return response;
+
     }
 
     @DeleteMapping("{id}")
@@ -128,4 +153,5 @@ public class OrderController {
         orderService.deleteOrder(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

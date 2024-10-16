@@ -1,6 +1,5 @@
 package com.example.demo.services;
 
-import com.example.demo.dtos.OrderDto;
 import com.example.demo.exception.CustomNotFoundException;
 import com.example.demo.models.Client;
 import com.example.demo.models.Order;
@@ -94,6 +93,11 @@ public class OrderService implements IOrderService {
         orderRepository.save(order);
     }
 
+    public boolean checkOrderStats(Long id) {
+        return orderRepository.findById(id)
+                .map(order -> order.getStatus() == OrderStatus.Accepted)
+                .orElse(false);
+    }
 
     public OrderVM toVM(Order order){
         OrderVM orderVM = new OrderVM();

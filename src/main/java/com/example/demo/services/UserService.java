@@ -4,6 +4,7 @@ import com.example.demo.dtos.AuthDto;
 import com.example.demo.exception.CustomBadRequestException;
 import com.example.demo.models.Client;
 import com.example.demo.models.User;
+import com.example.demo.models.UserPrincipal;
 import com.example.demo.repositories.IClientRepository;
 import com.example.demo.repositories.IUserRepository;
 import com.example.demo.services.interfaces.IUserService;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,7 +50,15 @@ public class UserService implements IUserService {
         }
         throw new CustomBadRequestException("something went wrong " + authDto.getUsername());
     }
+    public String getLoggedInEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserPrincipal userDetails = (UserPrincipal) authentication.getPrincipal();
 
+            return userDetails.getEmail();
+        }
+        return null;
+    }
     public AuthVM login(AuthDto authDto) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword()));
 
