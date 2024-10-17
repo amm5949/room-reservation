@@ -1,10 +1,6 @@
 package com.example.demo.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
@@ -16,8 +12,14 @@ import java.util.List;
 @Setter
 public class Client extends User
 {
+
+    public Client(String username, String password, String email){
+        super(username, password, email);
+    }
+
     private Integer balance;
 
     @OneToMany(mappedBy = "client")
     private List<Order> orders;
+
 }

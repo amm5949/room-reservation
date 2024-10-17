@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
+    @ExceptionHandler(CustomNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(CustomNotFoundException ex) {
         ErrorResponse err = new ErrorResponse();
 
         err.setStatus(HttpStatus.NOT_FOUND.value());
@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(BadRequestException.class)
+    @ExceptionHandler(CustomBadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(Exception ex) {
         ErrorResponse err = new ErrorResponse();
 

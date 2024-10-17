@@ -19,9 +19,10 @@ public class Room extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String roomNumber;
+    private String title;
     private Integer price;
     private Integer capacity;
+    private String imageUrl;
     @Enumerated(EnumType.STRING)
     private RoomStatus status;
 

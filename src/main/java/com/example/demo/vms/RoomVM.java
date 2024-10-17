@@ -1,20 +1,19 @@
-package com.example.demo.dtos;
+package com.example.demo.vms;
 
 import com.example.demo.models.enums.RoomStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
-public class RoomDto
+public class RoomVM
 {
+    private Long id;
     private String title;
     private Integer price;
     private Integer capacity;
