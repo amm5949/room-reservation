@@ -35,11 +35,11 @@ This back-end project implements a room reservation system using Spring Boot. It
 4. ***Run the application***
    `mvn spring-boot:run`
 
-##Usage
+## Usage
 Access the API documentation at `http://localhost:8080/swagger-ui.html`.
 Use tools like Postman to interact with the endpoints for managing rooms and reservations.
 
-##Contributing
+## Contributing
 1. Fork the repository.
 2. Create a new branch(`git checkout -b feature-branch`).
 3. Commit your changes(`git commit -m 'Add new feature'`).
