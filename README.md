@@ -25,14 +25,14 @@ This back-end project implements a room reservation system using Spring Boot. It
 2. **Configure the database**
 - Create a MYSQL database named `room_reservation`.
 - Update the database configuration in `src/main/resources/application.properties`:
-  ```
+  ```bash
   spring.datasource.url=jdbc:mysql://locahost:3306/room_reservation
   spring.datasource.username=your_username
   spring.datasource.password=your_password
-  
-3. ***Build the project***
+
+3. **Build the project**
    `mvn clean install`
-4. ***Run the application***
+4. **Run the application**
    `mvn spring-boot:run`
 
 ## Usage
